@@ -17,7 +17,7 @@ def apply_filters(image_path):
     5. Brightness Adjustment
     """
     output_dir = "processed_images"
-    # Ensure directory exists (done once in main, but safe to keep)
+  
     if not os.path.exists(output_dir):
         try:
             os.makedirs(output_dir, exist_ok=True)
@@ -47,7 +47,7 @@ def apply_filters(image_path):
         # 5. Brightness (+50)
         brightness = cv2.convertScaleAbs(img, alpha=1, beta=50)
         
-        # Save output (using filename only to keep output folder flat)
+    
         filename = os.path.basename(image_path)
         cv2.imwrite(os.path.join(output_dir, f"out_{filename}"), sharpened)
         return filename
@@ -65,7 +65,7 @@ def run_concurrent_futures(image_list, num_workers):
         # Convert to list to force execution of the generator
         list(executor.map(apply_filters, image_list))
 
-# --- MAIN EXECUTION ---
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Parallel Image Processing Script")
     parser.add_argument('--mode', choices=['mp', 'cf'], required=True, 
@@ -74,7 +74,7 @@ if __name__ == "__main__":
                         help="Number of parallel processes")
     args = parser.parse_args()
 
-    # Define paths
+
     input_folder = "images_subset"
     output_folder = "processed_images"
 
@@ -82,10 +82,10 @@ if __name__ == "__main__":
         print(f"Error: Folder '{input_folder}' not found.")
         exit()
 
-    # Create output directory if it doesn't exist
+
     os.makedirs(output_folder, exist_ok=True)
         
-    # LOGIC TO TRAVERSE SUBDIRECTORIES (100 categories)
+
     print(f"Scanning {input_folder} for images...")
     images = []
     for root, dirs, files in os.walk(input_folder):
@@ -93,8 +93,7 @@ if __name__ == "__main__":
             if f.lower().endswith(('.jpg', '.jpeg', '.png')):
                 images.append(os.path.join(root, f))
 
-    # Optional: Limit dataset size for consistent testing 
-    # (Your dataset should have 1000, so we use all of them)
+
     num_images = len(images)
     
     if num_images == 0:
@@ -115,4 +114,5 @@ if __name__ == "__main__":
     print(f"RESULTS FOR {args.mode.upper()} MODE")
     print(f"Workers: {args.workers}")
     print(f"Time Taken: {duration:.4f} seconds")
+
     print("-" * 30)
